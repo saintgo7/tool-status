@@ -1,0 +1,72 @@
+#!/bin/bash
+
+# Project Status - Detailed information display
+# Universal project status tool
+
+# Installation path
+PSTATUS_HOME="${PSTATUS_HOME:-$HOME/03_TOOLS/project-status}"
+
+# Load libraries
+source "$PSTATUS_HOME/lib/core/detector.sh"
+source "$PSTATUS_HOME/lib/core/utils.sh"
+source "$PSTATUS_HOME/lib/formatters/detailed.sh"
+
+main() {
+    # Check if current directory is a project
+    if ! is_project_dir; then
+        echo "Not a project directory"
+        exit 1
+    fi
+
+    # Collect project information
+    local project_name=$(get_project_name)
+    local project_types=$(detect_project_type)
+
+    # Collect data array
+    local -a collected_data=()
+
+    # Collect Git info
+    if [[ "$project_types" == *"git"* ]]; then
+        source "$PSTATUS_HOME/lib/collectors/git.sh"
+        while IFS='=' read -r key value; do
+            collected_data+=("git_$key=$value")
+        done < <(collect_git_info)
+    fi
+
+    # Collect Go info
+    if [[ "$project_types" == *"golang"* ]]; then
+        source "$PSTATUS_HOME/lib/collectors/golang.sh"
+        while IFS='=' read -r key value; do
+            collected_data+=("go_$key=$value")
+        done < <(collect_golang_info)
+    fi
+
+    # Collect Node.js info
+    if [[ "$project_types" == *"nodejs"* ]]; then
+        source "$PSTATUS_HOME/lib/collectors/nodejs.sh"
+        while IFS='=' read -r key value; do
+            collected_data+=("node_$key=$value")
+        done < <(collect_nodejs_info)
+    fi
+
+    # Collect Docker info
+    if [[ "$project_types" == *"docker"* ]]; then
+        source "$PSTATUS_HOME/lib/collectors/docker.sh"
+        while IFS='=' read -r key value; do
+            collected_data+=("docker_$key=$value")
+        done < <(collect_docker_info)
+    fi
+
+    # Collect Dev log info
+    if [[ "$project_types" == *"devlog"* ]]; then
+        source "$PSTATUS_HOME/lib/collectors/devlog.sh"
+        while IFS='=' read -r key value; do
+            collected_data+=("devlog_$key=$value")
+        done < <(collect_devlog_info)
+    fi
+
+    # Format and display detailed information
+    format_detailed "$project_name" "$project_types" "${collected_data[@]}"
+}
+
+main "$@"
