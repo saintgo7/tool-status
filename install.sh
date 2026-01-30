@@ -2,12 +2,38 @@
 
 # Universal Project Status Display Installer
 # Installs the pstatus system to ~/03_TOOLS/project-status
+# Supports macOS and Linux with automatic shell detection
 
 INSTALL_DIR="${INSTALL_DIR:-$HOME/03_TOOLS/project-status}"
+
+# Detect OS
+detect_os() {
+    case "$(uname -s)" in
+        Darwin*) echo "macos" ;;
+        Linux*)  echo "linux" ;;
+        *)       echo "unknown" ;;
+    esac
+}
+
+# Detect shell
+detect_shell() {
+    if [[ -n "$ZSH_VERSION" ]]; then
+        echo "zsh"
+    elif [[ -n "$BASH_VERSION" ]]; then
+        echo "bash"
+    else
+        basename "$SHELL"
+    fi
+}
+
+OS=$(detect_os)
+CURRENT_SHELL=$(detect_shell)
 
 echo "========================================================================"
 echo "Universal Project Status Display - Installation"
 echo "========================================================================"
+echo "OS: $OS"
+echo "Shell: $CURRENT_SHELL"
 echo "Installing to: $INSTALL_DIR"
 echo ""
 
@@ -43,29 +69,73 @@ chmod +x "$INSTALL_DIR/lib/core/"*.sh 2>/dev/null || true
 chmod +x "$INSTALL_DIR/lib/collectors/"*.sh 2>/dev/null || true
 chmod +x "$INSTALL_DIR/lib/formatters/"*.sh 2>/dev/null || true
 
+# Add to PATH
+echo ""
+echo "Adding to PATH..."
+PATH_LINE="export PATH=\"\$HOME/03_TOOLS/project-status/bin:\$PATH\""
+
 echo ""
 echo "========================================================================"
 echo "Installation Complete!"
 echo "========================================================================"
 echo ""
-echo "To enable auto-display on directory change:"
-echo ""
-echo "For zsh (~/.zshrc):"
-echo "  echo 'source $INSTALL_DIR/shell/pstatus.zsh' >> ~/.zshrc"
-echo "  source ~/.zshrc"
-echo ""
-echo "For bash (~/.bashrc):"
-echo "  echo 'source $INSTALL_DIR/shell/pstatus.bash' >> ~/.bashrc"
-echo "  source ~/.bashrc"
-echo ""
-echo "Manual commands:"
+
+# Provide OS and Shell specific instructions
+if [[ "$OS" == "macos" ]]; then
+    # macOS typically uses zsh (Catalina+)
+    if [[ "$CURRENT_SHELL" == "zsh" ]] || [[ -f "$HOME/.zshrc" ]]; then
+        echo "Detected macOS with zsh. To enable auto-display:"
+        echo ""
+        echo "  echo 'source $INSTALL_DIR/shell/pstatus.zsh' >> ~/.zshrc"
+        echo "  echo '$PATH_LINE' >> ~/.zshrc"
+        echo "  source ~/.zshrc"
+        echo ""
+    else
+        echo "Detected macOS with bash. To enable auto-display:"
+        echo ""
+        echo "  echo 'source $INSTALL_DIR/shell/pstatus.bash' >> ~/.bash_profile"
+        echo "  echo '$PATH_LINE' >> ~/.bash_profile"
+        echo "  source ~/.bash_profile"
+        echo ""
+    fi
+elif [[ "$OS" == "linux" ]]; then
+    # Linux typically uses bash
+    if [[ "$CURRENT_SHELL" == "zsh" ]] || [[ -f "$HOME/.zshrc" ]]; then
+        echo "Detected Linux with zsh. To enable auto-display:"
+        echo ""
+        echo "  echo 'source $INSTALL_DIR/shell/pstatus.zsh' >> ~/.zshrc"
+        echo "  echo '$PATH_LINE' >> ~/.zshrc"
+        echo "  source ~/.zshrc"
+        echo ""
+    else
+        echo "Detected Linux with bash. To enable auto-display:"
+        echo ""
+        echo "  echo 'source $INSTALL_DIR/shell/pstatus.bash' >> ~/.bashrc"
+        echo "  echo '$PATH_LINE' >> ~/.bashrc"
+        echo "  source ~/.bashrc"
+        echo ""
+    fi
+else
+    echo "Unknown OS. Manual configuration required:"
+    echo ""
+    echo "For zsh (~/.zshrc):"
+    echo "  echo 'source $INSTALL_DIR/shell/pstatus.zsh' >> ~/.zshrc"
+    echo "  echo '$PATH_LINE' >> ~/.zshrc"
+    echo ""
+    echo "For bash (~/.bashrc or ~/.bash_profile):"
+    echo "  echo 'source $INSTALL_DIR/shell/pstatus.bash' >> ~/.bashrc"
+    echo "  echo '$PATH_LINE' >> ~/.bashrc"
+    echo ""
+fi
+
+echo "Manual commands (available after adding to PATH):"
 echo "  pstatus        - Show detailed project status"
 echo "  pstatus-brief  - Show brief summary"
 echo "  pst            - Alias for pstatus"
 echo "  pstb           - Alias for pstatus-brief"
 echo ""
-echo "Test it:"
-echo "  cd ~/01_DEV/your-project"
-echo "  pstatus"
+echo "Test it (without PATH, use full path):"
+echo "  cd ~/your-project"
+echo "  $INSTALL_DIR/bin/pstatus"
 echo ""
 echo "========================================================================"

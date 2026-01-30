@@ -1,17 +1,30 @@
 #!/bin/bash
 
 # Quick Install Script
-# Usage: curl -fsSL https://raw.githubusercontent.com/user/project-status/main/quick-install.sh | bash
+# Usage: curl -fsSL https://raw.githubusercontent.com/saintgo7/tool-status/main/quick-install.sh | bash
+# Supports macOS and Linux with automatic OS and shell detection
 
 set -e
 
 INSTALL_DIR="${INSTALL_DIR:-$HOME/03_TOOLS/project-status}"
 REPO_URL="https://github.com/saintgo7/tool-status"
-VERSION="1.0.0"
+VERSION="1.1.0"
+
+# Detect OS
+detect_os() {
+    case "$(uname -s)" in
+        Darwin*) echo "macos" ;;
+        Linux*)  echo "linux" ;;
+        *)       echo "unknown" ;;
+    esac
+}
+
+OS=$(detect_os)
 
 echo "========================================================================"
 echo "Universal Project Status Display - Quick Install"
 echo "========================================================================"
+echo "OS: $OS"
 echo "Installing to: $INSTALL_DIR"
 echo ""
 
@@ -44,27 +57,44 @@ echo ""
 echo "Running installer..."
 ./install.sh
 
-# Detect shell and provide integration instructions
 echo ""
 echo "========================================================================"
-echo "Installation Complete!"
+echo "Quick Install Complete!"
 echo "========================================================================"
 echo ""
 
+# OS and Shell specific final instructions
 SHELL_NAME=$(basename "$SHELL")
+PATH_LINE="export PATH=\"\$HOME/03_TOOLS/project-status/bin:\$PATH\""
 
-if [[ "$SHELL_NAME" == "zsh" ]]; then
-    echo "Detected zsh. To enable auto-display:"
-    echo "  echo 'source $INSTALL_DIR/shell/pstatus.zsh' >> ~/.zshrc"
-    echo "  source ~/.zshrc"
-elif [[ "$SHELL_NAME" == "bash" ]]; then
-    echo "Detected bash. To enable auto-display:"
-    echo "  echo 'source $INSTALL_DIR/shell/pstatus.bash' >> ~/.bashrc"
-    echo "  source ~/.bashrc"
-else
-    echo "Unknown shell: $SHELL_NAME"
-    echo "Please manually add to your shell config:"
-    echo "  source $INSTALL_DIR/shell/pstatus.bash"
+if [[ "$OS" == "macos" ]]; then
+    if [[ "$SHELL_NAME" == "zsh" ]] || [[ -f "$HOME/.zshrc" ]]; then
+        echo "macOS with zsh detected. Enable auto-display with:"
+        echo ""
+        echo "  echo 'source $INSTALL_DIR/shell/pstatus.zsh' >> ~/.zshrc"
+        echo "  echo '$PATH_LINE' >> ~/.zshrc"
+        echo "  source ~/.zshrc"
+    else
+        echo "macOS with bash detected. Enable auto-display with:"
+        echo ""
+        echo "  echo 'source $INSTALL_DIR/shell/pstatus.bash' >> ~/.bash_profile"
+        echo "  echo '$PATH_LINE' >> ~/.bash_profile"
+        echo "  source ~/.bash_profile"
+    fi
+elif [[ "$OS" == "linux" ]]; then
+    if [[ "$SHELL_NAME" == "zsh" ]] || [[ -f "$HOME/.zshrc" ]]; then
+        echo "Linux with zsh detected. Enable auto-display with:"
+        echo ""
+        echo "  echo 'source $INSTALL_DIR/shell/pstatus.zsh' >> ~/.zshrc"
+        echo "  echo '$PATH_LINE' >> ~/.zshrc"
+        echo "  source ~/.zshrc"
+    else
+        echo "Linux with bash detected. Enable auto-display with:"
+        echo ""
+        echo "  echo 'source $INSTALL_DIR/shell/pstatus.bash' >> ~/.bashrc"
+        echo "  echo '$PATH_LINE' >> ~/.bashrc"
+        echo "  source ~/.bashrc"
+    fi
 fi
 
 echo ""
