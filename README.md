@@ -266,4 +266,5 @@ Pull Request와 이슈는 언제든 환영합니다!
 
 ## 작성자
 
-Wonkwang University COmputer Software eng. Ph.d SNT Go.
+**SNT Go**
+Wonkwang University Computer Software Engineering Ph.D
