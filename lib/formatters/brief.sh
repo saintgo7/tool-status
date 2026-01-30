@@ -29,7 +29,7 @@ format_brief() {
     local output="[$project_name]"
 
     # Project type
-    local type_str="Unknown"
+    local type_str=""
     if [[ "$project_types" == *"golang"* ]]; then
         type_str="Go"
     elif [[ "$project_types" == *"nodejs"* ]]; then
@@ -40,6 +40,10 @@ format_brief() {
         type_str="Rust"
     elif [[ "$project_types" == *"java"* ]]; then
         type_str="Java"
+    elif [[ "$project_types" == *"git"* ]]; then
+        type_str="Git Repo"
+    else
+        type_str="Directory"
     fi
     output+=" $type_str"
 

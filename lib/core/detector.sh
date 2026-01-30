@@ -25,15 +25,8 @@ detect_project_type() {
 }
 
 is_project_dir() {
-    # Check if current directory is a project (any marker)
-    [[ -d ".git" ]] || \
-    [[ -f "go.mod" ]] || \
-    [[ -f "package.json" ]] || \
-    [[ -f "requirements.txt" ]] || \
-    [[ -f "Cargo.toml" ]] || \
-    [[ -f "pom.xml" ]] || \
-    [[ -f "build.gradle" ]] || \
-    [[ -f "docker-compose.yml" ]]
+    # Always return true - show info for all directories
+    return 0
 }
 
 get_project_name() {
