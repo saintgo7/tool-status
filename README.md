@@ -266,4 +266,4 @@ Pull Request와 이슈는 언제든 환영합니다!
 
 ## 작성자
 
-Universal Project Status Display System
+Wonkwang University COmputer Software eng. Ph.d SNT Go.
