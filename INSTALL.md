@@ -51,16 +51,15 @@ source ~/.bashrc
 ```bash
 cd ~/03_TOOLS/project-status
 
-# GitHub에 저장소 생성 후
-git remote add origin https://github.com/yourusername/project-status.git
-git push -u origin main
+# GitHub 저장소
+# https://github.com/saintgo7/tool-status
 ```
 
 ### 2-2. 다른 서버에서 Clone
 
 ```bash
 cd ~/03_TOOLS
-git clone https://github.com/yourusername/project-status.git
+git clone https://github.com/saintgo7/tool-status.git project-status
 
 cd project-status
 ./install.sh
@@ -88,11 +87,11 @@ cd ~/03_TOOLS
 ## 방법 4: 직접 다운로드 (인터넷 연결 시)
 
 ```bash
-# Quick install (GitHub에 업로드 후)
-curl -fsSL https://raw.githubusercontent.com/user/project-status/main/quick-install.sh | bash
+# Quick install
+curl -fsSL https://raw.githubusercontent.com/saintgo7/tool-status/main/quick-install.sh | bash
 
 # 또는 wget
-wget -qO- https://raw.githubusercontent.com/user/project-status/main/quick-install.sh | bash
+wget -qO- https://raw.githubusercontent.com/saintgo7/tool-status/main/quick-install.sh | bash
 ```
 
 ## 설치 확인

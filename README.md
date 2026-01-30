@@ -30,10 +30,10 @@
 ```bash
 # 1. 저장소 클론
 cd ~/03_TOOLS
-git clone https://github.com/yourusername/project-status.git
+git clone https://github.com/saintgo7/tool-status.git project-status
 # 또는 다운로드
-curl -L https://github.com/yourusername/project-status/archive/main.tar.gz | tar xz
-mv project-status-main project-status
+curl -L https://github.com/saintgo7/tool-status/archive/main.tar.gz | tar xz
+mv tool-status-main project-status
 
 # 2. 설치 실행
 cd project-status

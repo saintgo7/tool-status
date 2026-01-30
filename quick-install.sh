@@ -6,7 +6,7 @@
 set -e
 
 INSTALL_DIR="${INSTALL_DIR:-$HOME/03_TOOLS/project-status}"
-REPO_URL="https://github.com/yourusername/project-status"  # Update this
+REPO_URL="https://github.com/saintgo7/tool-status"
 VERSION="1.0.0"
 
 echo "========================================================================"
